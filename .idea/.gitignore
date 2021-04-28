@@ -1,0 +1,9 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+.idea/
+out/
+
+compProgramming.iml
+src/Main.scala
