@@ -4,37 +4,14 @@ import scala.io.StdIn
 import scala.util.Random
 import scala.collection.mutable.{Map => MMap}
 import scala.util.control.Breaks
+import Algorithms.ExtendedEuclid
 
 object Main extends App{
   val sc = new java.util.Scanner(System.in)
   val debugMode = true
   val dl = new DebugLogger(debugMode)
 
-
-  val n = sc.nextInt()
-  val towers = Seq.fill(n)(sc.nextLong())
-  val mod = BigInt.apply(10).pow(9) + 7
-
-  val towersSorted = towers.sorted
-  var num = 0L
-  val towersDistinct = for(t <- towersSorted if t != num)yield{
-    val ret = t - num + 1
-    num = t
-    ret
-  }
-
-  val ans = towersDistinct.foldLeft(BigInt(1)){_ * _ % mod}
-  println(ans)
-
-
-
-
-
-
-
-
-
-
+  println(ExtendedEuclid.gcdExt(-10,-3))
 
 
 
