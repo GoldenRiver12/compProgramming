@@ -1,5 +1,0 @@
-package EnrichMyLibrary
-
-object RichIntegral {
-
-}
