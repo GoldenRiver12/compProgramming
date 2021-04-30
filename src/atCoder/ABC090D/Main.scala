@@ -1,4 +1,4 @@
-package AtCoder.ABC090D
+package atCoder.ABC090D
 
 object Main extends App {
   val sc = new java.util.Scanner(System.in)

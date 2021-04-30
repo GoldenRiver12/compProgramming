@@ -1,6 +1,6 @@
-package Algorithms
+package algorithms
 
-import EnrichMyLibrary.RichIntegralOps
+import enrichMyLibrary.RichIntegralOps
 
 object ExtendedEuclid {
 

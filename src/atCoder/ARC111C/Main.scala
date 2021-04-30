@@ -1,4 +1,4 @@
-package AtCoder.ARC111C
+package atCoder.ARC111C
 object Main extends App{
   val sc = new java.util.Scanner(System.in)
 /*  val n = 200000

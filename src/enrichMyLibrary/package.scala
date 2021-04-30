@@ -1,4 +1,4 @@
-package object EnrichMyLibrary {
+package object enrichMyLibrary {
   implicit class RichIntegralOps[T](val t1:T)(implicit int:Integral[T]){
     import int._
     def /+(t2:T):T ={
