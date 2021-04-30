@@ -1,5 +1,7 @@
 package dataStructure
 
+import scala.util.Random
+
 class Graph[V](val vertices:Set[V],val adjMap:Map[V,Set[V]]) {
   def dfs(start:V):Seq[V] = {
     require(vertices.contains(start))
@@ -46,5 +48,58 @@ object Graph{
       .withDefaultValue(Set.empty)
 
     new Graph[V](vertices,adjMap)
+  }
+
+  /**
+   * 完全グラフを返す
+   * @param vertices
+   * @tparam V
+   * @return
+   */
+  def completeGraphOf[V](vertices:Set[V]):Graph[V] ={
+    of(vertices, vertices.toSeq.combinations(2).map{case a +: b +: _ =>(a,b)}.toSeq)
+  }
+
+  /**
+   * 与えられた頂点集合にランダムに辺を加えたグラフを返す
+   * @param vertices
+   * @param density 各頂点間に辺が張られる確率(0 <= _ <= 1)
+   * @tparam V
+   * @return
+   */
+  def generateRandomGraph[V](vertices:Set[V], density:Double):Graph[V]={
+    require(density >= 0 && density <= 1)
+    val rng = new Random()
+    val edges = vertices.toSeq.combinations(2)
+      .filter(_ => rng.nextDouble() <= density)
+      .map{case Seq(a,b,_*) =>(a,b)}
+      .toSeq
+
+    of(vertices, edges)
+  }
+
+  /**
+   * 与えられた頂点集合にランダムに辺を加えた連結グラフを返す
+   * @param vertices
+   * @param density 各頂点間に辺が張られる確率(0 <= _ <= 1)
+   * @tparam V
+   * @return 連結グラフ（density=0でも連結のための最低限の辺は張られる）
+   */
+  def generateRandomConnectedGraph[V](vertices:Set[V], density:Double):Graph[V]={
+    require(density >= 0 && density <= 1)
+    val rng = new Random()
+    //全頂点を通る単純道
+    val path:Set[(V,V)] = rng.shuffle(vertices.toSeq)
+      .sliding(2)
+      .map{case Seq(a,b,_*) =>(a,b)}
+      .toSet
+
+    val edges = vertices.toSeq.combinations(2)
+      .filter(_ => rng.nextDouble() <= density)
+      .map{case Seq(a,b,_*) =>(a,b)}
+      .toSet
+
+    //ランダムに張った辺に道を加えることで連結にする
+    of(vertices,edges.union(path).toSeq)
   }
 }
