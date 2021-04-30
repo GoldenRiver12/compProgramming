@@ -20,14 +20,27 @@ object ExtendedEuclid {
       val (x_, y_) = gcdExt(b, r)
       (y_, x_ - q * y_)
     }
+
   }
 
-
-
-
-
-
-
+  /**
+   * 剰余体 Z/pZ における逆元を求める
+   * @param p
+   * @param a
+   * @return aの逆元（pが素数でなくaと互いに素でない場合はNone）
+   */
+  def invOnMod[T](p:T)(a:T)(implicit int:Integral[T]):Option[T]={
+    import int._
+    val (x,y) = gcdExt(p,a)
+    if(p * x + a * y != one)
+      None
+    else {
+      if(y < zero)
+        Some(y+p)
+      else
+        Some(y)
+    }
+  }
 
 }
 
