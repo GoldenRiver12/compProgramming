@@ -82,10 +82,11 @@ object Graph{
    * 与えられた頂点集合にランダムに辺を加えた連結グラフを返す
    * @param vertices
    * @param density 各頂点間に辺が張られる確率(0 <= _ <= 1)
+   * @param isDense 密グラフとして生成するか（trueなら計算量は頂点数の2乗に比例，falseなら生成する辺数に比例）
    * @tparam V
    * @return 連結グラフ（density=0でも連結のための最低限の辺は張られる）
    */
-  def generateRandomConnectedGraph[V](vertices:Set[V], density:Double):Graph[V]={
+  def generateRandomConnectedGraph[V](vertices:Set[V], density:Double,isDense:Boolean = true):Graph[V]={
     require(density >= 0 && density <= 1)
     val rng = new Random()
     //全頂点を通る単純道
@@ -94,10 +95,20 @@ object Graph{
       .map{case Seq(a,b,_*) =>(a,b)}
       .toSet
 
-    val edges = vertices.toSeq.combinations(2)
-      .filter(_ => rng.nextDouble() <= density)
-      .map{case Seq(a,b,_*) =>(a,b)}
-      .toSet
+    val edges = {
+      if(isDense)
+        vertices.toSeq.combinations(2)
+          .filter(_ => rng.nextDouble() <= density)
+          .map{case Seq(a,b,_*) =>(a,b)}
+          .toSet
+      else{
+        val verticesSeq = vertices.toSeq
+        (for(_ <- 1 to (vertices.size * vertices.size * density).toInt)yield {
+          (verticesSeq(rng.nextInt(verticesSeq.size))
+            ,verticesSeq(rng.nextInt(verticesSeq.size)))
+        }).toSet
+      }
+    }
 
     //ランダムに張った辺に道を加えることで連結にする
     of(vertices,edges.union(path).toSeq)
